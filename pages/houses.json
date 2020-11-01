@@ -28,7 +28,8 @@
 				"avatar": "https://a0.muscache.com/im/users/44716037/profile_pic/1442818722/original.jpg?im_w=720",
 				"comment": "Awesome apartment I really recommend it!"
 			}
-		]
+		],
+		"price": "50.00"
 	},
 	{
 		"id": "2",
@@ -37,6 +38,7 @@
 		"town": "Isla Mujeres",
 		"title": "The world famous Seachell House - Casa caracol",
 		"rating": 4.22,
-		"reviewsCount": 256
+		"reviewsCount": 256,
+		"price": "70.00"
 	}
 ]

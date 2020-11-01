@@ -6,7 +6,7 @@ import moment from "moment";
 
 const format = "DD MMM yyyy";
 
-const DayRangePicker = () => {
+const DayRangePicker = ({ datesChanged }) => {
   const today = moment().toDate();
   const tomorrow = moment().add(1, "day").toDate();
 
@@ -33,10 +33,13 @@ const DayRangePicker = () => {
             
             const momentDay = moment(day);
             const momentEndDay = moment(endDate);
-            
             if (momentEndDay.diff(momentDay) < 1) {
-              setEndDate(momentDay.add(1, "day").toDate());
+              const newEndDay = momentDay.add(1, "day").toDate();
+              setEndDate(newEndDay);
+              datesChanged(day, newEndDay);
+              return;
             }
+            datesChanged(day, endDate);
           }}
         />
       </div>
@@ -55,6 +58,7 @@ const DayRangePicker = () => {
           }}
           onDayChange={(day) => {
             setEndDate(day);
+            datesChanged(startDate, day);
           }}
         />
       </div>

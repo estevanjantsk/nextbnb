@@ -1,9 +1,14 @@
+import { useState } from "react";
+import moment from "moment";
 import Head from "next/head";
 import houses from "../houses.json";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
 
 const House = (props) => {
+  const [dateChosen, setDateChosen] = useState(false);
+  const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] = useState(0);
+
   return (
     <Layout content={
       <div className="container">
@@ -24,7 +29,20 @@ const House = (props) => {
 
         <aside>
           <h2>Add dates for prices</h2>
-          <DateRangePicker />
+          <DateRangePicker datesChanged={(start, end) => {
+            const diff = moment(end).diff(moment(start), 'days');
+            setNumberOfNightsBetweenDates(diff);
+            setDateChosen(true);
+          }}/>
+          {dateChosen && (
+            <div>
+              <h2>Price per night</h2>
+              <p>${props.house.price}</p>
+              <h2>Total price for booking</h2>
+              <p>${(numberOfNightsBetweenDates * props.house.price).toFixed(2)}</p>
+              <button className="reserve">Reserve</button>
+            </div>
+          )}
         </aside>
 
         <style jsx>{`
@@ -37,6 +55,17 @@ const House = (props) => {
           aside {
             border: 1px solid #ccc;
             padding: 20px;
+          }
+
+          .reserve {
+            background-color: rgb(255, 90, 95);
+            color: white;
+            font-size: 13px;
+            width: 100%;
+            border: none;
+            height: 40px;
+            border-radius: 4px;
+            cursor: pointer;
           }
         `}</style>
       </div>
