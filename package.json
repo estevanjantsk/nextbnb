@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "moment": "^2.29.1",
     "next": "^10.0.0",
     "react": "^17.0.1",
     "react-day-picker": "^7.4.8",
