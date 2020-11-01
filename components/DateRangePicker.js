@@ -2,13 +2,17 @@ import { useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import LocaleUtils from "react-day-picker/moment";
 import "react-day-picker/lib/style.css";
+import moment from "moment";
 
 const format = "DD MMM yyyy";
 
 const DayRangePicker = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  
+  const today = moment().toDate();
+  const tomorrow = moment().add(1, "day").toDate();
+
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(tomorrow);
+
   return (
     <div className="date-range-picker-container">
       <div>
@@ -18,13 +22,21 @@ const DayRangePicker = () => {
           parseDate={LocaleUtils.parseDate}
           placeholder={`${LocaleUtils.formatDate(new Date(), format)}`}
           format={format}
+          value={startDate}
           dayPickerProps={{
             disabledDays: {
-              before: new Date()
+              before: startDate
             }
           }}
           onDayChange={(day) => {
             setStartDate(day);
+            
+            const momentDay = moment(day);
+            const momentEndDay = moment(endDate);
+            
+            if (momentEndDay.diff(momentDay) < 1) {
+              setEndDate(momentDay.add(1, "day").toDate());
+            }
           }}
         />
       </div>
@@ -35,9 +47,10 @@ const DayRangePicker = () => {
           parseDate={LocaleUtils.parseDate}
           placeholder={`${LocaleUtils.formatDate(new Date(), format)}`}
           format={format}
+          value={endDate}
           dayPickerProps={{
             disabledDays: {
-              before: new Date()
+              before: moment(startDate).add(1, 'day').toDate()
             }
           }}
           onDayChange={(day) => {
