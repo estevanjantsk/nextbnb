@@ -3,7 +3,10 @@ const LoginModal = (props) => {
     <>
       <h2>Log in</h2>
       <div>
-        <form>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          console.log('LoginModal submited');
+        }}>
           <input type="email" name="email" id="email" placeholder="Email address" />
           <input type="password" name="password" id="password" placeholder="Password" />
           <button>Log in</button>

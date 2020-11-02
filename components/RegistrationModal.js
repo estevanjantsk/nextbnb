@@ -3,7 +3,10 @@ const RegistrationModal = (props) => {
     <>
       <h2>Sign up</h2>
       <div>
-        <form>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          console.log('RegistrationModal submited');
+        }}>
           <input type="email" name="email" id="email" placeholder="Email address" />
           <input type="password" name="password" id="password" placeholder="Password" />
           <input type="password" name="passwordconfirmation" id="passwordconfirmation" placeholder="Enter password again" />
