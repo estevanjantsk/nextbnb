@@ -1,7 +1,16 @@
 import Link from "next/link";
+import { useStoreActions } from "easy-peasy";
 
-const Header = () => (
-  <div className="nav-container">
+const Header = () => {
+  const setShowLoginModal = useStoreActions(actions => {
+    return actions.modals.setShowLoginModal
+  });
+  const setShowRegistrationModal = useStoreActions(actions => {
+    return actions.modals.setShowRegistrationModal
+  });
+
+  return (
+    <div className="nav-container">
     <Link href="/">
       <a>
         <img src="/img/logo.png" alt="Logo"/>
@@ -10,14 +19,10 @@ const Header = () => (
     <nav>
       <ul>
         <li>
-          <Link href='/register'>
-            <a>Sign up</a>
-          </Link>
+          <a href='#' onClick={ () => setShowRegistrationModal() }>Sign up</a>
         </li>
         <li>
-          <Link href='/login'>
-            <a>Log in</a>
-          </Link>
+          <a href='#' onClick={ () => setShowLoginModal() }>Log in</a>
         </li>
       </ul>
     </nav>
@@ -58,6 +63,6 @@ const Header = () => (
       }
     `}</style>
   </div>
-);
+)};
 
 export default Header;
