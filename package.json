@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "nodemon server.js",
     "build": "next build",
-    "start": "next start"
+    "start": "NODE_ENV=production node server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
     "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "easy-peasy": "^4.0.1",
+    "express": "^4.17.1",
     "moment": "^2.29.1",
     "next": "^10.0.0",
     "pg": "^8.4.2",
@@ -22,5 +23,8 @@
     "react-day-picker": "^7.4.8",
     "react-dom": "^17.0.1",
     "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }
