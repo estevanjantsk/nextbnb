@@ -26,5 +26,10 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "server.js"
+    ]
   }
 }
