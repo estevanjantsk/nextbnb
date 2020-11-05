@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 
 const Header = () => {
+  const user = useStoreState(state => state.user.user)
   const setShowLoginModal = useStoreActions(actions => {
     return actions.modals.setShowLoginModal
   });
@@ -18,24 +19,38 @@ const Header = () => {
     </Link>
     <nav>
       <ul>
-        <li>
-          <a href='#' onClick={ () => setShowRegistrationModal() }>Sign up</a>
-        </li>
-        <li>
-          <a href='#' onClick={ () => setShowLoginModal() }>Log in</a>
-        </li>
+        { user ? (
+          <li className="username">{user}</li>
+        ) : (
+          <>
+            <li>
+            <a href='#' onClick={ () => setShowRegistrationModal() }>Sign up</a>
+            </li>
+            <li>
+              <a href='#' onClick={ () => setShowLoginModal() }>Log in</a>
+            </li>
+          </>
+        ) }
+        
       </ul>
     </nav>
 
     <style jsx>{`
+      .nav-container {
+        border-bottom: 1px solid #eee;
+        height: 50px;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 10px 0 0;
+      }
+      
       ul {
+        height: 100%;
         margin: 0;
         padding: 0;
-      }
-
-      li {
-        display: block;
-        float: left;
+        display: flex;
+        align-items: center;
+        list-style-type: none;
       }
 
       a {
@@ -47,19 +62,6 @@ const Header = () => {
 
       nav a {
         padding: 1em 0.5em;
-      }
-
-      .nav-container {
-        border-bottom: 1px solid #eee;
-        height: 50px;
-      }
-
-      img {
-        float: left;
-      }
-      
-      ul {
-        float: right;
       }
     `}</style>
   </div>
