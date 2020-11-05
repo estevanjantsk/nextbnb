@@ -6,5 +6,6 @@ export default async (req, res) => {
 
   req.logout()
   req.session.destroy()
+
   res.json({ status: 'success', message: 'logged out' })
 }
