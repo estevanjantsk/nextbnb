@@ -21,7 +21,7 @@ const RegistrationModal = (props) => {
       setUser(email)
       setHideModal()
     } catch (error) {
-      alert(error.data.message)
+      alert(error.response.data.message)
       return
     }
   }
