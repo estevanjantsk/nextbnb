@@ -6,16 +6,14 @@ const User = require('./model').User
 const sequelize = require('./model').sequelize
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
+const bodyParser = require('body-parser')
+
+const apiAuth = require('./api/auth')
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
-  passwordField: 'password'
+  passwordField: 'password',
 }, async function(email, password, done) {
-  if (!email || !password) {
-    done('Email and password required', null)
-    return
-  }
-
   const user = await User.findOne({ where: { email: email }})
 
   if (!user) {
@@ -23,7 +21,7 @@ passport.use(new LocalStrategy({
     return
   }
 
-  const valid = await User.isPasswordValid(password)
+  const valid = await user.isPasswordValid(password)
 
   if (!valid) {
     done('Email and password do not match', null)
@@ -53,6 +51,7 @@ nextApp.prepare().then(() => {
   const server = express()
 
   server.use(
+    bodyParser.json(),
     session({
       secret: '2d0fdcee-c721-42ea-a796-7cfe85221b9a',
       resave: false,
@@ -67,6 +66,8 @@ nextApp.prepare().then(() => {
     passport.initialize(),
     passport.session()
   )
+
+  server.use("/api/auth", apiAuth);
 
   server.all('*', (req, res) => {
     return handle(req, res)

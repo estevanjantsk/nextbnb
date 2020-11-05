@@ -13,7 +13,11 @@ const sequelize = new Sequelize(database, user, password, {
   logging: false
 })
 
-class User extends Model {}
+class User extends Model {
+  isPasswordValid(password) {
+    return bcrypt.compare(password, this.password)
+  }
+}
 
 User.init({
   email: {
@@ -36,10 +40,6 @@ User.init({
     }
   }
 })
-
-User.prototype.isPasswordValid = function(password) {
-  return bcrypt.compare(password, this.password)
-}
 
 exports.User = User
 exports.sequelize = sequelize
