@@ -33,13 +33,13 @@ const LoginModal = (props) => {
           e.preventDefault()
           submit()
         }}>
-          <input type="email" name="email" id="email" placeholder="Email address" onChange={(e) => setEmail(e.target.value) } />
-          <input type="password" name="password" id="password" placeholder="Password" onChange={(e) => setPassword(e.target.value) } />
+          <input type="email" name="email" id="email" placeholder="Email address" onChange={(e) => setEmail(e.target.value)} />
+          <input type="password" name="password" id="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
           <button>Log in</button>
         </form>
         <p>
-          Don't have an account yet?{' '}
-          <a href='#' onClick={() => props.showSignup() }>
+          Don&apos;t have an account yet?{' '}
+          <a href='#' onClick={() => props.showSignup()}>
             Sign up
           </a>
         </p>

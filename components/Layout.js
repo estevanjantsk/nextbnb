@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useStoreState, useStoreActions } from "easy-peasy";
 import Header from "./Header";
 import Modal from "./Modal";
@@ -26,14 +25,14 @@ const Layout = (props) => {
       <main>
         {props.content}
       </main>
-      {showModal && 
+      {showModal &&
         <Modal close={() => setHideModal()}>
-          { showLoginModal && <LoginModal showSignup={() => {
+          {showLoginModal && <LoginModal showSignup={() => {
             setShowRegistrationModal();
-          }} /> }
-          { showRegistrationModal && <RegistrationModal showLogin={() => {
+          }} />}
+          {showRegistrationModal && <RegistrationModal showLogin={() => {
             setShowLoginModal();
-          }} /> }
+          }} />}
         </Modal>
       }
 
