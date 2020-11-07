@@ -16,6 +16,7 @@ House.sync({ alter: true })
 Review.sync({ alter: true })
 
 const apiAuth = require('./api/auth')
+const apiHouses = require('./api/houses')
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
@@ -75,6 +76,7 @@ nextApp.prepare().then(() => {
   )
 
   server.use("/api/auth", apiAuth);
+  server.use("/api/houses", apiHouses);
 
   server.all('*', (req, res) => {
     return handle(req, res)

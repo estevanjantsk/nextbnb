@@ -20,6 +20,7 @@
     "easy-peasy": "^4.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "isomorphic-unfetch": "^3.1.0",
     "moment": "^2.29.1",
     "next": "^10.0.0",
     "passport": "^0.4.1",
