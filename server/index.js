@@ -2,19 +2,26 @@ const express = require('express')
 const next = require('next')
 const session = require('express-session')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
-const User = require('./models/user')
 const sequelize = require('./database')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const bodyParser = require('body-parser')
+
+const User = require('./models/user')
+const House = require('./models/house')
+const Review = require('./models/review')
+
+User.sync({ alter: true })
+House.sync({ alter: true })
+Review.sync({ alter: true })
 
 const apiAuth = require('./api/auth')
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password',
-}, async function(email, password, done) {
-  const user = await User.findOne({ where: { email: email }})
+}, async function (email, password, done) {
+  const user = await User.findOne({ where: { email: email } })
 
   if (!user) {
     done('User not found', null)
@@ -34,7 +41,7 @@ passport.serializeUser((user, done) => {
   done(null, user.email)
 })
 passport.deserializeUser((email, done) => {
-  User.findOne({ where: { email: email }}).then((user) => {
+  User.findOne({ where: { email: email } }).then((user) => {
     done(null, user)
   })
 })
