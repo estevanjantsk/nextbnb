@@ -29,7 +29,7 @@ const Index = (props) => {
 
 Index.getInitialProps = async () => {
 	const res = await fetch(`http://localhost:3000/api/houses`)
-	const json = await res.json();
+	const json = await res.json()
 	const houses = json.data
 
 	return {

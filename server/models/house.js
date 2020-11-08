@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../database')
+const Review = require('./review')
 
-class House extends Sequelize.Model {}
+class House extends Sequelize.Model { }
 
 House.init(
   {
@@ -38,5 +39,10 @@ House.init(
     timestamps: false
   }
 )
+
+House.hasMany(Review, {
+  foreignKey: 'houseId'
+})
+Review.belongsTo(House)
 
 module.exports = House

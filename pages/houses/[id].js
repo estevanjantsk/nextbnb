@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useStoreActions } from "easy-peasy";
 import moment from "moment";
 import Head from "next/head";
-import houses from "../houses.json";
+import fetch from "isomorphic-unfetch";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
 
@@ -21,14 +21,28 @@ const House = (props) => {
         </Head>
 
         <article>
-          <img src={props.house.picture} width="100%" alt="House picture"/>
+          <img src={props.house.picture} width="100%" alt="House picture" />
           <p>
             {props.house.type} - {props.house.town}
           </p>
           <p>{props.house.title}</p>
           <p>
-            {props.house.rating} ({props.house.reviewsCount})
+            {props.house.rating}
           </p>
+          {props.house.reviewsCount ? (
+            <div className="reviews">
+              <h3>{props.house.reviewsCount} Reviews</h3>
+
+              {props.house.reviews.map((review, index) => {
+                return (
+                  <div key={index}>
+                    <p>{new Date(review.createdAt).toDateString()}</p>
+                    <p>{review.comment}</p>
+                  </div>
+                )
+              })}
+            </div>
+          ) : <></>}
         </article>
 
         <aside>
@@ -37,7 +51,7 @@ const House = (props) => {
             const diff = moment(end).diff(moment(start), 'days');
             setNumberOfNightsBetweenDates(diff);
             setDateChosen(true);
-          }}/>
+          }} />
           {dateChosen && (
             <div>
               <h2>Price per night</h2>
@@ -64,16 +78,20 @@ const House = (props) => {
           }
 
         `}</style>
-      </div>
+      </div >
     } />
   )
 }
 
-House.getInitialProps = ({ query }) => {
+House.getInitialProps = async ({ query }) => {
   const { id } = query;
 
+  const res = await fetch(`http://localhost:3000/api/houses/${id}`)
+  const json = await res.json()
+  const house = json.data
+
   return {
-    house: houses.filter((house) => house.id === id)[0]
+    house
   };
 }
 
