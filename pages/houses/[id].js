@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useStoreActions } from "easy-peasy";
+import { useStoreActions, useStoreState } from "easy-peasy";
 import moment from "moment";
 import Head from "next/head";
 import fetch from "isomorphic-unfetch";
@@ -12,6 +12,7 @@ const House = (props) => {
   const setShowLoginModal = useStoreActions(actions => {
     return actions.modals.setShowLoginModal
   });
+  const user = useStoreState(state => state.user.user)
 
   return (
     <Layout content={
@@ -58,9 +59,13 @@ const House = (props) => {
               <p>${props.house.price}</p>
               <h2>Total price for booking</h2>
               <p>${(numberOfNightsBetweenDates * props.house.price).toFixed(2)}</p>
-              <button className="reserve" onClick={() => {
-                setShowLoginModal();
-              }}>Reserve</button>
+              {user ? (<button className="reserve" onClick={() => {
+                console.log("should do the reservation");
+              }}>Reserve</button>) : (
+                  <button className="reserve" onClick={() => {
+                    setShowLoginModal();
+                  }}>Login to Reserve</button>
+                )}
             </div>
           )}
         </aside>

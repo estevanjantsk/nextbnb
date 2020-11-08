@@ -10,10 +10,12 @@ const bodyParser = require('body-parser')
 const User = require('./models/user')
 const House = require('./models/house')
 const Review = require('./models/review')
+const Booking = require('./models/booking')
 
 User.sync({ alter: true })
 House.sync({ alter: true })
 Review.sync({ alter: true })
+Booking.sync({ alter: true })
 
 const apiAuth = require('./api/auth')
 const apiHouses = require('./api/houses')
