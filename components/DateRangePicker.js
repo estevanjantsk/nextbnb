@@ -17,7 +17,7 @@ const DayRangePicker = ({ datesChanged }) => {
     <div className="date-range-picker-container">
       <div>
         <label>From:</label>
-        <DayPickerInput 
+        <DayPickerInput
           formatDate={LocaleUtils.formatDate}
           parseDate={LocaleUtils.parseDate}
           placeholder={`${LocaleUtils.formatDate(new Date(), format)}`}
@@ -25,15 +25,15 @@ const DayRangePicker = ({ datesChanged }) => {
           value={startDate}
           dayPickerProps={{
             disabledDays: {
-              before: startDate
+              before: moment().toDate()
             }
           }}
           onDayChange={(day) => {
             setStartDate(day);
-            
+
             const momentDay = moment(day);
             const momentEndDay = moment(endDate);
-            if (momentEndDay.diff(momentDay) < 1) {
+            if (momentEndDay.diff(momentDay, 'days') < 1) {
               const newEndDay = momentDay.add(1, "day").toDate();
               setEndDate(newEndDay);
               datesChanged(day, newEndDay);
@@ -45,7 +45,7 @@ const DayRangePicker = ({ datesChanged }) => {
       </div>
       <div>
         <label>To:</label>
-        <DayPickerInput 
+        <DayPickerInput
           formatDate={LocaleUtils.formatDate}
           parseDate={LocaleUtils.parseDate}
           placeholder={`${LocaleUtils.formatDate(new Date(), format)}`}
@@ -62,7 +62,7 @@ const DayRangePicker = ({ datesChanged }) => {
           }}
         />
       </div>
-  
+
       <style jsx>{`
         .date-range-picker-container div {
           display: grid;
