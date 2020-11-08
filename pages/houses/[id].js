@@ -3,15 +3,18 @@ import { useStoreActions, useStoreState } from "easy-peasy";
 import moment from "moment";
 import Head from "next/head";
 import fetch from "isomorphic-unfetch";
+import axios from "axios";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
 
 const House = (props) => {
   const [dateChosen, setDateChosen] = useState(false);
   const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] = useState(0);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const setShowLoginModal = useStoreActions(actions => {
     return actions.modals.setShowLoginModal
-  });
+  })
   const user = useStoreState(state => state.user.user)
 
   return (
@@ -52,6 +55,8 @@ const House = (props) => {
             const diff = moment(end).diff(moment(start), 'days');
             setNumberOfNightsBetweenDates(diff);
             setDateChosen(true);
+            setStartDate(start)
+            setEndDate(end)
           }} />
           {dateChosen && (
             <div>
@@ -59,8 +64,23 @@ const House = (props) => {
               <p>${props.house.price}</p>
               <h2>Total price for booking</h2>
               <p>${(numberOfNightsBetweenDates * props.house.price).toFixed(2)}</p>
-              {user ? (<button className="reserve" onClick={() => {
-                console.log("should do the reservation");
+              {user ? (<button className="reserve" onClick={async () => {
+                try {
+                  const response = await axios.post('/api/houses/reserve', {
+                    houseId: props.house.id,
+                    startDate,
+                    endDate
+                  })
+                  if (response.data.status === 'error') {
+                    alert(response.data.message)
+                    return
+                  }
+                  console.log(response.data);
+                } catch (error) {
+                  console.log(error)
+                  return
+                }
+
               }}>Reserve</button>) : (
                   <button className="reserve" onClick={() => {
                     setShowLoginModal();
