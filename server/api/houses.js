@@ -16,6 +16,21 @@ const getDatesBetweenDates = (startDate, endDate) => {
   return dates
 }
 
+const canBookThoseDates = async (houseId, startDate, endDate) => {
+  const results = await Booking.findAll({
+    where: {
+      houseId: houseId,
+      startDate: {
+        [Op.lte]: new Date(endDate)
+      },
+      endDate: {
+        [Op.gte]: new Date(startDate)
+      }
+    }
+  })
+  return !(results.length > 0)
+}
+
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -74,6 +89,22 @@ router.post('/booked', async (req, res) => {
   } catch (error) {
     res.status(500).json({ status: 'error', message: 'not possible to get booked dates' })
   }
+})
+
+router.post('/check', async (req, res) => {
+  const startDate = req.body.startDate
+  const endDate = req.body.endDate
+  const houseId = req.body.houseId
+
+  let message = 'free'
+  if (!(await canBookThoseDates(houseId, startDate, endDate))) {
+    message = 'busy'
+  }
+
+  res.json({
+    status: 'success',
+    message: message
+  })
 })
 
 router.get('/:id', async (req, res) => {
