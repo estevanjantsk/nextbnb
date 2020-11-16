@@ -6,12 +6,14 @@ import moment from "moment";
 
 const format = "DD MMM yyyy";
 
-const DayRangePicker = ({ datesChanged }) => {
+const DayRangePicker = ({ datesChanged, bookedDates }) => {
   const today = moment().toDate();
   const tomorrow = moment().add(1, "day").toDate();
 
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(tomorrow);
+
+  const formatedBookedDates = bookedDates.map((bd) => new Date(bd));
 
   return (
     <div className="date-range-picker-container">
@@ -24,9 +26,10 @@ const DayRangePicker = ({ datesChanged }) => {
           format={format}
           value={startDate}
           dayPickerProps={{
-            disabledDays: {
-              before: moment().toDate()
-            }
+            disabledDays: [
+              ...formatedBookedDates,
+              { before: moment().toDate() }
+            ]
           }}
           onDayChange={(day) => {
             setStartDate(day);
@@ -52,9 +55,10 @@ const DayRangePicker = ({ datesChanged }) => {
           format={format}
           value={endDate}
           dayPickerProps={{
-            disabledDays: {
-              before: moment(startDate).add(1, 'day').toDate()
-            }
+            disabledDays: [
+              ...formatedBookedDates,
+              { before: moment(startDate).add(1, 'day').toDate() }
+            ]
           }}
           onDayChange={(day) => {
             setEndDate(day);

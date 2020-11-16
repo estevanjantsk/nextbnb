@@ -7,6 +7,25 @@ import axios from "axios";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
 
+const getBookedDates = async houseId => {
+  try {
+    const response = await axios.post(
+      'http://localhost:3000/api/houses/booked',
+      {
+        houseId
+      }
+    )
+    if (response.data.status === 'error') {
+      alert(response.data.message)
+      return
+    }
+    return response.data.dates
+  } catch (error) {
+    console.error(error)
+    return
+  }
+}
+
 const House = (props) => {
   const [dateChosen, setDateChosen] = useState(false);
   const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] = useState(0);
@@ -57,7 +76,7 @@ const House = (props) => {
             setDateChosen(true);
             setStartDate(start)
             setEndDate(end)
-          }} />
+          }} bookedDates={props.bookedDates} />
           {dateChosen && (
             <div>
               <h2>Price per night</h2>
@@ -115,8 +134,11 @@ House.getInitialProps = async ({ query }) => {
   const json = await res.json()
   const house = json.data
 
+  const bookedDates = await getBookedDates(id)
+
   return {
-    house
+    house,
+    bookedDates
   };
 }
 
