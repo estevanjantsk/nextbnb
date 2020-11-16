@@ -47,6 +47,26 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/reserve', async (req, res) => {
+  const startDate = req.body.startDate
+  const endDate = req.body.endDate
+  const houseId = req.body.houseId
+
+  if (!req.session.passport) {
+    res.status(403).json({
+      status: 'error',
+      message: 'Unauthorized'
+    })
+    return
+  }
+
+  if (!(await canBookThoseDates(houseId, startDate, endDate))) {
+    res.status(500).json({
+      status: 'error',
+      message: 'House is already booked'
+    })
+    return
+  }
+
   const userEmail = req.session.passport.user
   try {
     const user = await User.findOne({ where: { email: userEmail } })

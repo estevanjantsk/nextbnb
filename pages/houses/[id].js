@@ -7,6 +7,25 @@ import axios from "axios";
 import Layout from "../../components/Layout";
 import DateRangePicker from "../../components/DateRangePicker";
 
+const canReserve = async (houseId, startDate, endDate) => {
+  try {
+    const response = await axios.post(
+      'http://localhost:3000/api/houses/check',
+      { houseId, startDate, endDate }
+    )
+    if (response.data.status === 'error') {
+      alert(response.data.message)
+      return
+    }
+
+    if (response.data.message === 'busy') return false
+    return true
+  } catch (error) {
+    console.error(error)
+    return
+  }
+}
+
 const getBookedDates = async houseId => {
   try {
     const response = await axios.post(
@@ -85,6 +104,13 @@ const House = (props) => {
               <p>${(numberOfNightsBetweenDates * props.house.price).toFixed(2)}</p>
               {user ? (<button className="reserve" onClick={async () => {
                 try {
+                  if (
+                    !(await canReserve(props.house.id, startDate, endDate))
+                  ) {
+                    alert('The dates chosen are not valid')
+                    return
+                  }
+
                   const response = await axios.post('/api/houses/reserve', {
                     houseId: props.house.id,
                     startDate,
