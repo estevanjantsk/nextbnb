@@ -7,6 +7,8 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const bodyParser = require('body-parser')
 
+require('dotenv').config()
+
 const User = require('./models/user')
 const House = require('./models/house')
 const Review = require('./models/review')
@@ -19,6 +21,7 @@ Booking.sync({ alter: true })
 
 const apiAuth = require('./api/auth')
 const apiHouses = require('./api/houses')
+const apiStripe = require('./api/stripe')
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
@@ -79,6 +82,7 @@ nextApp.prepare().then(() => {
 
   server.use("/api/auth", apiAuth);
   server.use("/api/houses", apiHouses);
+  server.use("/api/stripe", apiStripe);
 
   server.all('*', (req, res) => {
     return handle(req, res)

@@ -75,6 +75,7 @@ router.post('/reserve', async (req, res) => {
       userId: user.id,
       startDate: req.body.startDate,
       endDate: req.body.endDate,
+      sessionId: req.body.sessionId,
     })
     res.json({ status: 'success', message: 'ok' })
   } catch (error) {
