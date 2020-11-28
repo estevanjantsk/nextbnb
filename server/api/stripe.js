@@ -1,6 +1,6 @@
 const express = require("express");
-
 const router = express.Router();
+const Booking = require('../models/booking');
 
 router.post('/session', async (req, res) => {
   const amount = req.body.amount
@@ -28,10 +28,32 @@ router.post('/session', async (req, res) => {
 });
 
 router.post('/webhook', async (req, res) => {
-  res.json({
-    status: 'success',
-    received: true
-  })
+  const sig = req.headers['stripe-signature'];
+  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+  const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.rawBody, sig, endpointSecret);
+  }
+  catch (err) {
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Handle the event
+  if (event.type === 'checkout.session.completed') {
+    const sessionId = event.data.object.id
+
+    try {
+      await Booking.update({ paid: true }, { where: { sessionId } })
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  // Return a res to acknowledge receipt of the event
+  res.json({ received: true });
 })
 
 module.exports = router;

@@ -64,7 +64,11 @@ nextApp.prepare().then(() => {
   const server = express()
 
   server.use(
-    bodyParser.json(),
+    bodyParser.json({
+      verify: (req, res, buf) => {
+        req.rawBody = buf;
+      }
+    }),
     session({
       secret: '2d0fdcee-c721-42ea-a796-7cfe85221b9a',
       resave: false,
