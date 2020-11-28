@@ -22,6 +22,7 @@ Booking.sync({ alter: true })
 const apiAuth = require('./api/auth')
 const apiHouses = require('./api/houses')
 const apiStripe = require('./api/stripe')
+const apiBookings = require('./api/bookings')
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
@@ -87,6 +88,7 @@ nextApp.prepare().then(() => {
   server.use("/api/auth", apiAuth);
   server.use("/api/houses", apiHouses);
   server.use("/api/stripe", apiStripe);
+  server.use("/api/bookings", apiBookings);
 
   server.all('*', (req, res) => {
     return handle(req, res)
