@@ -16,38 +16,41 @@ const Header = () => {
 
   return (
     <div className="nav-container">
-    <Link href="/"> 
-      <a>
-        <img src="/img/logo.png" alt="Logo"/>
-      </a>
-    </Link>
-    <nav>
-      <ul>
-        { user ? (
-          <>
-            <li className="username">{user}</li>
-            <li>
-              <a href="#" onClick={async () => {
-                await axios.post('/api/auth/logout')
-                setUser(null)
-              }}>Log out</a>
-            </li>
-          </>
-        ) : (
-          <>
-            <li>
-            <a href='#' onClick={ () => setShowRegistrationModal() }>Sign up</a>
-            </li>
-            <li>
-              <a href='#' onClick={ () => setShowLoginModal() }>Log in</a>
-            </li>
-          </>
-        ) }
-        
-      </ul>
-    </nav>
+      <Link href="/">
+        <a>
+          <img src="/img/logo.png" alt="Logo" />
+        </a>
+      </Link>
+      <nav>
+        <ul>
+          {user ? (
+            <>
+              <li className="username">{user}</li>
+              <Link href="/bookings">
+                <a>Bookings</a>
+              </Link>
+              <li>
+                <a href="#" onClick={async () => {
+                  await axios.post('/api/auth/logout')
+                  setUser(null)
+                }}>Log out</a>
+              </li>
+            </>
+          ) : (
+              <>
+                <li>
+                  <a href='#' onClick={() => setShowRegistrationModal()}>Sign up</a>
+                </li>
+                <li>
+                  <a href='#' onClick={() => setShowLoginModal()}>Log in</a>
+                </li>
+              </>
+            )}
 
-    <style jsx>{`
+        </ul>
+      </nav>
+
+      <style jsx>{`
       .nav-container {
         border-bottom: 1px solid #eee;
         height: 50px;
@@ -76,7 +79,8 @@ const Header = () => {
         padding: 1em 0.5em;
       }
     `}</style>
-  </div>
-)};
+    </div>
+  )
+};
 
 export default Header;
