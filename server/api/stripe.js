@@ -27,4 +27,11 @@ router.post('/session', async (req, res) => {
   })
 });
 
+router.post('/webhook', async (req, res) => {
+  res.json({
+    status: 'success',
+    received: true
+  })
+})
+
 module.exports = router;
