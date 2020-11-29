@@ -23,6 +23,7 @@ const apiAuth = require('./api/auth')
 const apiHouses = require('./api/houses')
 const apiStripe = require('./api/stripe')
 const apiBookings = require('./api/bookings')
+const apiHost = require('./api/host')
 
 passport.use(new LocalStrategy({
   usernameField: 'email',
@@ -89,6 +90,7 @@ nextApp.prepare().then(() => {
   server.use("/api/houses", apiHouses);
   server.use("/api/stripe", apiStripe);
   server.use("/api/bookings", apiBookings);
+  server.use("/api/host", apiHost);
 
   server.all('*', (req, res) => {
     return handle(req, res)
