@@ -1,4 +1,5 @@
 const express = require("express");
+const sanitizeHtml = require('sanitize-html')
 const router = express.Router();
 const Op = require("sequelize").Op;
 
@@ -50,6 +51,27 @@ router.get('/list', async (req, res) => {
     bookings,
     houses
   });
+})
+
+router.post('/new', async (req, res) => {
+  const houseData = req.body.house
+
+  if (!req.session.passport) {
+    res.status(403).json({ status: 'error', message: 'Unauthorized' })
+    return
+  }
+
+  const userEmail = req.session.passport.user
+
+  const user = await User.findOne({ where: { email: userEmail } })
+  houseData.host = user.id
+  houseData.description = sanitizeHtml(houseData.description, {
+    allowedTags: ['b', 'i', 'em', 'strong', 'p', 'br']
+  })
+
+  await House.create(houseData)
+
+  res.json({ status: 'success', message: 'ok' })
 })
 
 module.exports = router;
