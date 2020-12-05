@@ -6,6 +6,7 @@ const sequelize = require('./database')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const bodyParser = require('body-parser')
+const fileupload = require('express-fileupload')
 
 require('dotenv').config()
 
@@ -83,7 +84,8 @@ nextApp.prepare().then(() => {
       store: sessionStore
     }),
     passport.initialize(),
-    passport.session()
+    passport.session(),
+    fileupload()
   )
 
   server.use("/api/auth", apiAuth);
